@@ -80,7 +80,7 @@ def handle_message(event):
                     ]
                 )
             )
-            line_bot_api.reply_message(your_id, button_template_message)
+            line_bot_api.reply_message(event.reply_token, button_template_message)
         #加密者
         # elif user_state[user_id]['state'] == "Encryter":
         #     if user_state[user_id]["workflow"] == 0:
