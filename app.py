@@ -84,7 +84,7 @@ def handle_message(event):
         #Branch 1
         #加密者
         elif user_state[user_id]["state"] == "Encrypter":
-            if user_state[user_id]["workflow"] == 0 and message == "開始學習囉":
+            if user_state[user_id]["workflow"] == 0 and message == "開始學習囉～":
                 line_bot_api.reply_message(event.reply_token, TextSendMessage("小明資訊：\n公鑰（public key）：iLoveYou\n發送訊息內容：我想認識你\n\n請遵循上述進行以下任務\n\n請輸入欲發送訊息！！！"))
                 user_state[user_id]["workflow"] += 1
                 
