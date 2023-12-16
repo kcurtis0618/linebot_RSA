@@ -83,32 +83,32 @@ def handle_message(event):
             line_bot_api.reply_message(event.reply_token, button_template_message)
         #Branch 1
         #加密者
-        elif user_state[user_id]["state"] == "Encrypter":
-            if user_state[user_id]["workflow"] == 0 and message == "開始學習囉～":
-                line_bot_api.reply_message(event.reply_token, TextSendMessage("小明資訊：\n公鑰（public key）：iLoveYou\n發送訊息內容：我想認識你\n\n請遵循上述進行以下任務\n\n請輸入欲發送訊息！！！"))
+    elif user_state[user_id]["state"] == "Encrypter":
+        if user_state[user_id]["workflow"] == 0 and message == "開始學習囉～":
+            line_bot_api.reply_message(event.reply_token, TextSendMessage("小明資訊：\n公鑰（public key）：iLoveYou\n發送訊息內容：我想認識你\n\n請遵循上述進行以下任務\n\n請輸入欲發送訊息！！！"))
+            user_state[user_id]["workflow"] += 1
+            
+        elif user_state[user_id]["workflow"] == 1:
+            if message == '我想認識你':
+                line_bot_api.reply_message(event.reply_token, TextSendMessage("成功輸入訊息👍\n\n請輸入使用公鑰："))
                 user_state[user_id]["workflow"] += 1
+            else:
+                line_bot_api.reply_message(event.reply_token, TextSendMessage("輸入訊息失敗，請輸入正確訊息"))
+                    
+        elif user_state[user_id]["workflow"] == 2:
+            if message == 'iLoveYou':
+                user_state[user_id]["workflow"] = 0
+                line_bot_api.reply_message(event.reply_token, TextSendMessage("您已成功輸入公鑰👍\n\n您加密的文字為：\nd3j3kj348fkr9rj3o2j2ke3j4ldn32\n\n如要繼續進行請輸入：了解"))
                 
-            elif user_state[user_id]["workflow"] == 1:
-                if message == '我想認識你':
-                    line_bot_api.reply_message(event.reply_token, TextSendMessage("成功輸入訊息👍\n\n請輸入使用公鑰："))
-                    user_state[user_id]["workflow"] += 1
-                else:
-                    line_bot_api.reply_message(event.reply_token, TextSendMessage("輸入訊息失敗，請輸入正確訊息"))
-                    
-            elif user_state[user_id]["workflow"] == 2:
-                if message == 'iLoveYou':
-                    user_state[user_id]["workflow"] = 0
-                    line_bot_api.reply_message(event.reply_token, TextSendMessage("您已成功輸入公鑰👍\n\n您加密的文字為：\nd3j3kj348fkr9rj3o2j2ke3j4ldn32\n\n如要繼續進行請輸入：了解"))
-                    
-                else:
-                    line_bot_api.reply_message(event.reply_token, TextSendMessage("輸入公鑰失敗，請輸入正確鑰匙"))
+            else:
+                line_bot_api.reply_message(event.reply_token, TextSendMessage("輸入公鑰失敗，請輸入正確鑰匙"))
 
 
 
         #憑證
         #解密者
         #未在任何workflow中
-        else:
+    else:
             line_bot_api.reply_message(event.reply_token,TextSendMessage('抱歉我不太懂你的意思喔～'))
             
     # message = TextSendMessage(text=event.message.text)
