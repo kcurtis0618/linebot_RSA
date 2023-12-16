@@ -14,10 +14,10 @@ app = Flask(__name__)
 # 必須放上自己的Channel Access Token
 line_bot_api = LineBotApi('Your Channel Access Token')
 # 必須放上自己的Channel Secret
-handler = WebhookHandler('Your Channel Sercret')
+handler = WebhookHandler('7e9f7a1238765524eaeedab37d6e534c')
 
 #主動推播
-line_bot_api.push_message('Your User ID', TextSendMessage(text='你可以開始了'))
+line_bot_api.push_message('Udd9d677bacb9d89bb80323b5c1c9a46a', TextSendMessage(text='歡迎大家來到iLearn_數位簽章，\n已經加入聊天的各位，\n看來是很喜歡數位簽章呢～\n\n接下來請輸入「嗨」，\n開始學習數位簽章吧～\n'))
 
 # 監聽所有來自 /callback 的 Post Request
 @app.route("/callback", methods=['POST'])
