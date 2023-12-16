@@ -111,8 +111,8 @@ def handle_message(event):
         else:
             line_bot_api.reply_message(event.reply_token,TextSendMessage('抱歉我不太懂你的意思喔～'))
             
-    message = TextSendMessage(text=event.message.text)
-    line_bot_api.reply_message(event.reply_token,message)
+    # message = TextSendMessage(text=event.message.text)
+    # line_bot_api.reply_message(event.reply_token,message)
     
 #利用postback按鈕可以設計一些當按下按鈕後的動作
 @handler.add(PostbackEvent)
