@@ -84,7 +84,7 @@ def handle_message(event):
         #Branch 1
         #加密者
     elif user_state[user_id]["state"] == "Encrypter":
-        if user_state[user_id]["workflow"] == 0 and message == "開始學習囉～":
+        if user_state[user_id]["workflow"] == 0:
             line_bot_api.reply_message(event.reply_token, TextSendMessage("小明資訊：\n公鑰（public key）：iLoveYou\n發送訊息內容：我想認識你\n\n請遵循上述進行以下任務\n\n請輸入欲發送訊息！！！"))
             user_state[user_id]["workflow"] += 1
             
@@ -98,14 +98,36 @@ def handle_message(event):
         elif user_state[user_id]["workflow"] == 2:
             if message == 'iLoveYou':
                 user_state[user_id]["workflow"] = 0
+                user_state[user_id]["state"] = "Normal"
                 line_bot_api.reply_message(event.reply_token, TextSendMessage("您已成功輸入公鑰👍\n\n您加密的文字為：\nd3j3kj348fkr9rj3o2j2ke3j4ldn32\n\n如要繼續進行請輸入：了解"))
                 
             else:
                 line_bot_api.reply_message(event.reply_token, TextSendMessage("輸入公鑰失敗，請輸入正確鑰匙"))
 
 
-
         #憑證
+    elif user_state[user_id]["state"] == "Veracation":
+        if user_state[user_id]["workflow"] == 0:
+            line_bot_api.reply_message(event.reply_token, TextSendMessage("先來學習憑證授權單位 (CA) ：\n憑證授權單位是類似公證處的單位。 憑證授權單位 (CA)：該單位會發出數位憑證、簽章憑證以驗證有效性，以及追蹤哪些憑證已遭撤銷或已過期。\n\n為保障簽署的合法性，憑證需以下幾點：\n1. 有效公鑰\n2. 簽章憑證：須包含憑證機構、發送者（加密者）、時間戳記\n\n這樣憑證機構才可以將能夠成功保證簽章合法喔～\n學會了請回覆「ok」，進行測驗！"))
+            user_state[user_id]["workflow"] += 1
+            
+        elif user_state[user_id]["workflow"] == 1:
+            if message == 'ok':
+                line_bot_api.reply_message(event.reply_token, TextSendMessage("以下用戶跟您申請過鑰匙，下列為姓名及公鑰：\n小丑：CrazyRabbit \n小雞：ToBeContinue \n小明：iLoveYou \n小巴：iLoveXiaoMing\n\n底下是剛剛發送的簽章憑證：\n發送者：小雞\n簽發機構：NCNU\n發送時間：2023.12.26\n\n請問是底下簽章憑證是否合法？"))
+                user_state[user_id]["workflow"] += 1
+            else:
+                line_bot_api.reply_message(event.reply_token, TextSendMessage("看來你不太了解，請仔細閱讀，閱讀完成後可以再次輸入「ok」"))
+                    
+        elif user_state[user_id]["workflow"] == 2:
+            if message == 'iLoveYou':
+                user_state[user_id]["workflow"] = 0
+                user_state[user_id]["state"] = "Normal"
+                line_bot_api.reply_message(event.reply_token, TextSendMessage("您已成功輸入公鑰👍\n\n您加密的文字為：\nd3j3kj348fkr9rj3o2j2ke3j4ldn32\n\n如要繼續進行請輸入：了解"))
+                
+            else:
+                line_bot_api.reply_message(event.reply_token, TextSendMessage("輸入公鑰失敗，請輸入正確鑰匙"))
+
+
         #解密者
         #未在任何workflow中
     else:
