@@ -28,7 +28,7 @@ confirm_template_message = TemplateSendMessage(
         template=ConfirmTemplate(
             text='確認開始學習嗎？',
             actions=[
-                MessageAction(label='是',text='開始學習囉～'),
+                MessageAction(label='是',text="開始學習囉～"),
                 PostbackAction(label='不是',data='action=取消')
             ]
         )
