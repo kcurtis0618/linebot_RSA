@@ -28,7 +28,7 @@ confirm_template_message = TemplateSendMessage(
         template=ConfirmTemplate(
             text='確認開始學習嗎？',
             actions=[
-                MessageAction(label='是',text='開始填寫'),
+                MessageAction(label='是',text='開始學習囉～'),
                 PostbackAction(label='不是',data='action=取消')
             ]
         )
@@ -67,25 +67,43 @@ def handle_message(event):
         user_state[user_id] = {"state": "Normal", "workflow": 0}
 
     if user_state[user_id]["state"] == "Normal":
-        if re.match('嗨',message) or re.match('我想繼續學習',message):
+        if re.match('嗨',message) or re.match('了解',message):
             button_template_message = TemplateSendMessage(
                 alt_text='Start talk flow, multiselection button',
                 template=ButtonsTemplate(
                     title='開始學習囉',
                     text='請點選下方功能，成為下方角色',
                     actions=[
-                        PostbackAction(label='加密者', text='我想當加密者',data='action=encrpytion'),
-                        PostbackAction(label='憑證機構', text='我想當憑證公司的上帝視角',data='action=veracation'),
-                        PostbackAction(label='解密者', text='我想當解密者',data='action=decryption'),
+                        PostbackAction(label='加密者',data='action=encrpytion'),
+                        PostbackAction(label='憑證機構',data='action=veracation'),
+                        PostbackAction(label='解密者',data='action=decryption'),
                     ]
                 )
             )
             line_bot_api.reply_message(event.reply_token, button_template_message)
         #加密者
-        # elif user_state[user_id]['state'] == "Encryter":
-        #     if user_state[user_id]["workflow"] == 0:
-        #     if user_state[user_id]["workflow"] == 0:
-        #     if user_state[user_id]["workflow"] == 0:
+        elif user_state[user_id]['state'] == "Encryter":
+            if user_state[user_id]["workflow"] == 0:
+                line_bot_api.reply_message(event.reply_token, TextSendMessage("小明資訊：\n公鑰（public key）：iLoveYou\n發送訊息內容：我想認識你\n\n請遵循上述進行以下任務\n\n請輸入欲發送訊息！！！"))
+                user_state[user_id]["workflow"] += 1
+                
+            elif user_state[user_id]["workflow"] == 1:
+                if message == '我想認識你':
+                    line_bot_api.reply_message(event.reply_token, TextSendMessage("成功輸入訊息👍\n\n請輸入使用公鑰："))
+                    user_state[user_id]["workflow"] += 1
+                else:
+                    line_bot_api.reply_message(event.reply_token, TextSendMessage("輸入訊息失敗，請輸入正確訊息"))
+                    
+            elif user_state[user_id]["workflow"] == 2:
+                if message == 'iLoveYou':
+                    user_state[user_id]["workflow"] = 0
+                    line_bot_api.reply_message(event.reply_token, TextSendMessage("您已成功輸入公鑰👍\n\n您加密的文字為：\nd3j3kj348fkr9rj3o2j2ke3j4ldn32\n\n如要繼續進行請輸入：了解"))
+                    
+                else:
+                    line_bot_api.reply_message(event.reply_token, TextSendMessage("輸入公鑰失敗，請輸入正確鑰匙"))
+
+
+
         #憑證
         #解密者
         #未在任何workflow中
