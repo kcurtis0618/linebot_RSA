@@ -99,7 +99,7 @@ def handle_message(event):
             if message == 'iLoveYou':
                 user_state[user_id]["workflow"] = 0
                 user_state[user_id]["state"] = "Normal"
-                line_bot_api.reply_message(event.reply_token, TextSendMessage("您已成功輸入公鑰👍\n\n您加密的文字為：\nd3j3kj348fkr9rj3o2j2ke3j4ldn32\n\n如要繼續進行請輸入：了解"))
+                line_bot_api.reply_message(event.reply_token, TextSendMessage("您已成功輸入公鑰👍\n\n您加密的文字為：\nd3j3kj348fkr9rj3o2j2ke3j4ldn32\n\n如要繼續進行請輸入「了解」，若想中斷學習可以點選下方圖文選單"))
                 
             else:
                 line_bot_api.reply_message(event.reply_token, TextSendMessage("輸入公鑰失敗，請輸入正確鑰匙"))
@@ -113,25 +113,40 @@ def handle_message(event):
             
         elif user_state[user_id]["workflow"] == 1:
             if message == 'ok':
-                line_bot_api.reply_message(event.reply_token, TextSendMessage("以下用戶跟您申請過鑰匙，下列為姓名及公鑰：\n小丑：CrazyRabbit \n小雞：ToBeContinue \n小明：iLoveYou \n小巴：iLoveXiaoMing\n\n底下是剛剛發送的簽章憑證：\n發送者：小雞\n簽發機構：NCNU\n發送時間：2023.12.26\n\n請問是底下簽章憑證是否合法？"))
+                confirm_template = ConfirmTemplate(
+                    text="以下用戶跟您申請過鑰匙，下列為姓名及公鑰：\n小丑：CrazyRabbit \n小雞：ToBeContinue \n小明：iLoveYou \n小巴：iLoveXiaoMing\n\n底下是剛剛發送的簽章憑證：\n發送者：小雞\n簽發機構：NCNU\n發送時間：2023.12.26\n\n請問是底下簽章憑證是否合法？",
+                    actions=[
+                        MessageAction(label="是", text="是"),
+                        MessageAction(label="否", text="否")
+                    ]
+                )
+                template_message = TemplateSendMessage(alt_text="簽章憑證確認", template=confirm_template)
+                line_bot_api.reply_message(event.reply_token, template_message)
                 user_state[user_id]["workflow"] += 1
             else:
                 line_bot_api.reply_message(event.reply_token, TextSendMessage("看來你不太了解，請仔細閱讀，閱讀完成後可以再次輸入「ok」"))
                     
         elif user_state[user_id]["workflow"] == 2:
-            if message == 'iLoveYou':
+            if message == "是":
                 user_state[user_id]["workflow"] = 0
                 user_state[user_id]["state"] = "Normal"
-                line_bot_api.reply_message(event.reply_token, TextSendMessage("您已成功輸入公鑰👍\n\n您加密的文字為：\nd3j3kj348fkr9rj3o2j2ke3j4ldn32\n\n如要繼續進行請輸入：了解"))
+                line_bot_api.reply_message(event.reply_token, TextSendMessage("100分，看來對你來說太簡單了🤔\n\n如要繼續進行請輸入「了解」，若想中斷學習可以點選下方圖文選單"))
                 
             else:
-                line_bot_api.reply_message(event.reply_token, TextSendMessage("輸入公鑰失敗，請輸入正確鑰匙"))
+                line_bot_api.reply_message(event.reply_token, TextSendMessage("思考一下，再輸入一次"))
 
 
-        #解密者
-        #未在任何workflow中
+    #解密者
+    
+    #中斷學習
+    elif message == "我不想學習了！":
+        user_state[user_id]["state"] = "Normal"
+        user_state[user_id]["workflow"] = 0
+        line_bot_api.reply_message(event.reply_token, TextSendMessage("已結束學習，若想重新開始學習，按下圖文選單即可"))
+
+    #未在任何workflow中
     else:
-            line_bot_api.reply_message(event.reply_token,TextSendMessage('抱歉我不太懂你的意思喔～'))
+        line_bot_api.reply_message(event.reply_token,TextSendMessage('抱歉我不太懂你的意思喔～'))
             
     # message = TextSendMessage(text=event.message.text)
     # line_bot_api.reply_message(event.reply_token,message)
