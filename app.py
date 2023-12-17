@@ -157,7 +157,7 @@ def handle_message(event):
             user_state[user_id]["workflow"] += 1
 
         elif user_state[user_id]["workflow"] == 1:
-            if message == "iLoveYou":
+            if message == "HandsomeXiaoMing":
                 line_bot_api.reply_message(event.reply_token, TextSendMessage("恭喜你成功解密🎉，您的訊息為：\n\n我想認識你\n\n如要繼續進行請輸入「了解」，若想中斷學習可以點選下方圖文選單"))
                 user_state[user_id]["workflow"] = 0
                 user_state[user_id]["state"] = "Normal"
