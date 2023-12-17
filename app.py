@@ -66,7 +66,13 @@ def handle_message(event):
     if user_id not in user_state:
         user_state[user_id] = {"state": "Normal", "workflow": 0}
 
-    if user_state[user_id]["state"] == "Normal":
+    #中斷學習
+    if message == "我不想學習了！":
+        user_state[user_id]["state"] = "Normal"
+        user_state[user_id]["workflow"] = 0
+        line_bot_api.reply_message(event.reply_token, TextSendMessage("已結束學習，若想重新開始學習，按下圖文選單即可"))
+        
+    elif user_state[user_id]["state"] == "Normal":
         if re.match('嗨',message) or re.match('了解',message):
             button_template_message = TemplateSendMessage(
                 alt_text='Start talk flow, multiselection button',
@@ -137,12 +143,29 @@ def handle_message(event):
 
 
     #解密者
-    
-    #中斷學習
-    elif message == "我不想學習了！":
-        user_state[user_id]["state"] = "Normal"
-        user_state[user_id]["workflow"] = 0
-        line_bot_api.reply_message(event.reply_token, TextSendMessage("已結束學習，若想重新開始學習，按下圖文選單即可"))
+    elif user_state[user_id]["state"] == "Decryter":
+        if user_state[user_id]["workflow"] == 0 or message == "ok":
+            line_bot_api.reply_message(event.reply_token, TextSendMessage("您收到一則加密訊息：d3j3kj348fkr9rj3o2j2ke3j4ldn32\n\n請選擇鑰匙："))
+            confirm_template = ConfirmTemplate(
+                text="小明您好，\n您收到一則加密訊息：d3j3kj348fkr9rj3o2j2ke3j4ldn32\n\n請選擇鑰匙：",
+                actions=[
+                    MessageAction(label="公鑰", text="iLoveYou"),
+                    MessageAction(label="私鑰", text="HandsomeXiaoMing")
+                ]
+            )
+            template_message = TemplateSendMessage(alt_text="解密選擇題", template=confirm_template)
+            line_bot_api.reply_message(event.reply_token, template_message)
+            user_state[user_id]["workflow"] += 1
+
+        elif user_state[user_id]["workflow"] == 1:
+            if message == "iLoveYou":
+                line_bot_api.reply_message(event.reply_token, TextSendMessage("恭喜你成功解密🎉，您的訊息為：\n\n我想認識你\n\n如要繼續進行請輸入「了解」，若想中斷學習可以點選下方圖文選單"))
+                user_state[user_id]["workflow"] = 0
+                user_state[user_id]["state"] = "Normal"
+            else:
+                line_bot_api.reply_message(event.reply_token, TextSendMessage("您選錯了！😡，解密鑰匙如果是用公鑰解大家不就看光了嗎？\n\n了解之後請輸入「ok」，重新回答！"))
+                    
+
 
     #未在任何workflow中
     else:
