@@ -145,7 +145,6 @@ def handle_message(event):
     #解密者
     elif user_state[user_id]["state"] == "Decrypter":
         if user_state[user_id]["workflow"] == 0 or message == "ok":
-            line_bot_api.reply_message(event.reply_token, TextSendMessage("您收到一則加密訊息：d3j3kj348fkr9rj3o2j2ke3j4ldn32\n\n請選擇鑰匙："))
             confirm_template = ConfirmTemplate(
                 text="小明您好，\n您收到一則加密訊息：d3j3kj348fkr9rj3o2j2ke3j4ldn32\n\n請選擇鑰匙：",
                 actions=[
