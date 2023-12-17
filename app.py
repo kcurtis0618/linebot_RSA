@@ -143,7 +143,7 @@ def handle_message(event):
 
 
     #解密者
-    elif user_state[user_id]["state"] == "Decryter":
+    elif user_state[user_id]["state"] == "Decrypter":
         if user_state[user_id]["workflow"] == 0 or message == "ok":
             line_bot_api.reply_message(event.reply_token, TextSendMessage("您收到一則加密訊息：d3j3kj348fkr9rj3o2j2ke3j4ldn32\n\n請選擇鑰匙："))
             confirm_template = ConfirmTemplate(
@@ -189,8 +189,8 @@ def handle_postback(event):
         user_state[user_id]["state"] = "Veracation"
         line_bot_api.reply_message(event.reply_token, confirm_template_message)
 
-    elif data == 'action=decrpytion':
-        user_state[user_id]["state"] = "Decryter"
+    elif data == 'action=decryption':
+        user_state[user_id]["state"] = "Decrypter"
         line_bot_api.reply_message(event.reply_token, confirm_template_message)
     elif data == 'action=取消':
         user_state[user_id]["state"] = "Normal"
